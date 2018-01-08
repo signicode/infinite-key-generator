@@ -16,6 +16,7 @@ Install dependency from npm
 
 Then use it in the code as you like it:
 
+```javascript
     const fini = require("infinite-sequence-generator");
 
     const seq = fini();
@@ -28,12 +29,23 @@ Then use it in the code as you like it:
         console.log(key);
         if (i++ > 10) break;
     }
+```
 
 You may add a sequence prefix if you like.
 
+```javascript
     const seq = fini("AAA__");
 
     console.log(seq.next().value); // AAA__!
+```
+
+You can add your own alphabet:
+
+```javascript
+    const seq = fini("-prefix-", '0123456789abcdef');
+
+    console.log(seq.next().value); // AAA__!
+```
 
 
 License and contributions

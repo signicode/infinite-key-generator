@@ -1,22 +1,33 @@
 
-module.exports = function* getSeq(keyPrefix) {
+module.exports = function* getSeq(keyPrefix, alphabet = '') {
 
-    let id = " ";
+    let id = [];
     keyPrefix = keyPrefix || "__";
 
-    while (true) {
-        let ret = "";
-        for(let i = 0; i < id.length + 1; i++) {
-            const char = id.charCodeAt(i);
-            if (char < 126) {
-                ret += String.fromCharCode(char + 1) + id.substr(i+1);
-                break;
-            } else {
-                console.error("k", ret);
-                ret += " ";
-            }
+    if (!alphabet) {
+        for (let i = 32; i < 126; i++) {
+            alphabet += String.fromCharCode(i + 1);
         }
-        id = ret;
-        yield keyPrefix + id;
     }
+
+    let chars = [];
+    while (true) {
+        for(let i = 0; i < chars.length + 1; i++) {
+            if (i === chars.length) {
+                id.unshift(alphabet[0]);
+                chars.push(0);
+                break;
+            }
+
+            if (chars[i] < alphabet.length - 1) {
+                id[id.length - 1 - i] = alphabet[++chars[i]];
+                break;
+            }
+
+            chars[i] = 0;
+            id[id.length - 1 - i] = alphabet[chars[i]];
+        }
+        yield keyPrefix + id.join('');
+    }
+
 };
